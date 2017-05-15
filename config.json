@@ -1,0 +1,13 @@
+{
+  "db": {
+    "dialect":"mysql",
+    "host": "127.0.0.1",
+    "name": "dns",
+    "user": "root",
+    "password": ""
+  },
+  "offset":0,
+  "limit":1000,
+  "env": "dev",
+  "secretKey":"secretKey"
+}

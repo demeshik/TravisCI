@@ -1,0 +1,24 @@
+{
+  "name": "Domains",
+  "version": "1.0.0",
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "body-parser-xml": "^1.1.0",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-alpha.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mysql": "^2.11.1",	
+    "needle":"1.6.0",
+    "pg":"6.x",
+	  "pg-hstore": "^2.3.2",
+    "jsontoxml":"0.0.11",
+    "jwt-simple":"0.5.1",   
+    "sequelize": "^3.24.1"
+  },
+  "scripts":{
+    "start": "node index.js"
+  }
+}
