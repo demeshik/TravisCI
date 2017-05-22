@@ -42,7 +42,7 @@ app.use(function(req, res, next){
 });
 app.use('/api',apiControl);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5547;
 
 dbcontext.sequelize
     .sync()

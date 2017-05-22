@@ -6,7 +6,7 @@ module.exports = (AuthService,promiseHandler)=>{
     router.post('/',(req,res)=>{
         AuthService.login(req.body)
             .then((token)=>{
-                    res.sendJsonXml({"token":token});
+                res.sendJsonXml({"token":token});
             })
             .catch((err)=>res.error(err));
     });

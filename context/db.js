@@ -14,13 +14,21 @@ module.exports = (Sequelize, config) => {
         }
     };
 
-//    const sequelize = new Sequelize(config.db.name, config.db.user, config.db.password, options);
-    const sequelize = new Sequelize(process.env.DATABASE_URL,
-	{
+    var sequelize = null;
+
+    if(!!process.env.DATABASE_URL)
+    {
+        sequelize = new Sequelize(process.env.DATABASE_URL,
+	    {
 		define: {
                 timestamp: true,
                 paranoid: true
         }});
+    }
+    else
+    {
+        sequelize = new Sequelize(config.db.name, config.db.user, config.db.password, options);
+    }
 
     const User = require('../models/user')(Sequelize, sequelize);
     const Domains = require('../models/domains')(Sequelize, sequelize);
