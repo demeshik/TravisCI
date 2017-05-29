@@ -1,2 +1,12 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key: 13161666-0c5b-4b9f-8d7e-d1e1bb1ff3eb
+  app: travis-ci-demeshchik
+notifications:
+  email:
+    recipients:
+      - djrazor308@hotmail.com
+    on_success: never # default: change
+    on_failure: always # default: always
