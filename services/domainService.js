@@ -21,6 +21,10 @@ module.exports = (domainRepository, userRepository, errors) => {
         self.create = create;
         self.update = update;
         self.delete = del;
+        self.localCheck = localCheck;
+        self.domainrCheck = domainrCheck;
+        self.isAvail = isAvail;
+        self.getDomains = getDomains;
 
         function localCheck(_domain, _id){
             return new Promise((resolve,reject)=>{
@@ -62,6 +66,7 @@ module.exports = (domainRepository, userRepository, errors) => {
                 .then(values=>{
                     if(values[0]==null)
                     {
+                        
                         if(values[1].status[0].summary=='inactive')
                             resolve(2);
                         else
@@ -69,7 +74,7 @@ module.exports = (domainRepository, userRepository, errors) => {
                     }
                     else
                     {
-                        if(values[0].isFree)
+                        if(values[0].isFree&&values[1].status[0].summary=='inactive')
                             resolve(2);
                         else
                             resolve(0);

@@ -2,7 +2,6 @@
 var Promise = require("bluebird");
 var jwt = require("jwt-simple");
 var bcrypt = require('bcryptjs');
-//const config = require('../config.json');
 
 
 const saltRounds = 10;

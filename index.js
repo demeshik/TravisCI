@@ -50,3 +50,4 @@ dbcontext.sequelize
         app.listen(port,()=>console.log('Running on the 3000 port'));
     })
     .catch((err)=>console.log(err));
+
