@@ -42,12 +42,5 @@ app.use(function(req, res, next){
 });
 app.use('/api',apiControl);
 
-var port = process.env.PORT || 5547;
-
-dbcontext.sequelize
-    .sync()
-    .then(()=>{
-        app.listen(port,()=>console.log('Running on the 3000 port'));
-    })
-    .catch((err)=>console.log(err));
-
+module.exports.app = app;
+module.exports.dbcontext = dbcontext;

@@ -1,6 +1,7 @@
 const express = require('express');
+const errors = require('../helpers/errors.js');
 
-module.exports = (AuthService,promiseHandler)=>{
+module.exports = (AuthService,promiseHandler, errors)=>{
     const router = express.Router();
 
     router.post('/',(req,res)=>{

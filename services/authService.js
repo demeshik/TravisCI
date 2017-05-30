@@ -2,12 +2,12 @@
 var Promise = require("bluebird");
 var jwt = require("jwt-simple");
 var bcrypt = require('bcryptjs');
-//const config = require('../config.json');
+const config = require('../config.json');
 
 
 const saltRounds = 10;
 
-module.exports = (userRepository, Domains, config, errors) => {
+module.exports = (userRepository, Domains, errors) => {
 
     return {
         login: login,
@@ -22,7 +22,6 @@ module.exports = (userRepository, Domains, config, errors) => {
             
             let username = data.username;
             let password = data.password;
-
             userRepository.findOne({
                 where: {
                     username: username
@@ -63,8 +62,8 @@ module.exports = (userRepository, Domains, config, errors) => {
                             }]
                             })
                     .then((data)=>{
-                        //data = JSON.parse(JSON.stringify(data));
-                        //data.Domains = data.Domains.map(element =>({Domain:JSON.parse(JSON.stringify(element))}));
+                        data = JSON.parse(JSON.stringify(data));
+                        data.Domains = data.Domains.map(element =>({Domain:JSON.parse(JSON.stringify(element))}));
                         resolve(data);
                     })
                     .catch(reject);

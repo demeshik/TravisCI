@@ -28,12 +28,14 @@ domainMock.belongsTo(userMock);
 
 
 var authService = require('./lib/authService.js')(userMock,domainMock,config, errors);
+var domainService = require('./lib/domainService.js')(domainMock,userMock,errors);
+var userService = require('./lib/userService.js')(userMock,domainMock,errors);
 
 
 describe("authService", function(){
     describe("login", function() {
     
-        it("если недостаточно данных, должна вернуться ошибка", function(done) {
+        it("РµСЃР»Рё РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР°РЅРЅС‹С…, РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊСЃСЏ РѕС€РёР±РєР°", function(done) {
             var auth = {
                 username:"testuser"
             };
@@ -44,7 +46,7 @@ describe("authService", function(){
 
         });
 
-        it("если неверный пароль, должна вернуться ошибка",function(done){
+        it("РµСЃР»Рё РЅРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ, РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊСЃСЏ РѕС€РёР±РєР°",function(done){
             var auth = {
                 username:"testuser",
                 password:"password"
@@ -55,7 +57,7 @@ describe("authService", function(){
             });
         })
 
-        it("если все верно - возвращается токен",function(done){
+        it("РµСЃР»Рё РІСЃРµ РІРµСЂРЅРѕ - РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ С‚РѕРєРµРЅ",function(done){
             var auth = {
                 username:"admin",
                 password:"admin"
@@ -70,7 +72,7 @@ describe("authService", function(){
 
     describe("getInfo", function(){
         
-        it("если неверный токен, то вернуть ошибку", function(done){
+        it("РµСЃР»Рё РЅРµРІРµСЂРЅС‹Р№ С‚РѕРєРµРЅ, С‚Рѕ РІРµСЂРЅСѓС‚СЊ РѕС€РёР±РєСѓ", function(done){
             var data=[];
             data['x-auth'] = "test";
 
@@ -80,7 +82,7 @@ describe("authService", function(){
             });
         })
 
-        it("если все в порядке - вернуть пользователя", function(done){
+        it("РµСЃР»Рё РІСЃРµ РІ РїРѕСЂСЏРґРєРµ - РІРµСЂРЅСѓС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ", function(done){
             var data=[];
             data['x-auth'] = jwt.encode({username:"admin"}, config.secretKey);
 
@@ -92,4 +94,136 @@ describe("authService", function(){
             })
         });
     })
+})
+
+describe("domainService", function(){
+
+    describe("localcheck", function(){
+        it("РґРѕР»Р¶РµРЅ РІРµСЂРЅСѓС‚СЊСЃСЏ РґРѕРјРµРЅ", function(done){
+            domainService.localCheck("demeschhikisverycool.com").then(function(result){
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('domain');
+                expect(result).to.have.property('isFree');
+                done();
+            })
+        })
+    })
+
+    describe("domainrcheck", function(){
+        it("'google.com'.status === registrar", function(done){
+            domainService.domainrCheck("google.com").then(function(result){
+                assert.equal(result.status[0].summary,"registrar")
+                done();
+            })
+        })
+    })
+
+    describe("isAvailable", function(){
+        it("'yandex.com' === 0", function(done){
+            domainService.isAvail("yandex.com").then(function(result){
+                assert.equal(result,0);
+                done();
+            })
+        })
+
+        it("'demeschhikisverycool.com' === 2", function(done){
+            domainService.isAvail("demeschhikisverycool.com").then(function(result){
+                assert.equal(result,2);
+                done();
+            })
+        })
+
+    })
+
+    describe("getDomains", function(){
+        it("Р РµР·СѓР»СЊС‚Р°С‚ = РѕР±СЉРµРєС‚, РјРµС‚Р° = РѕР±СЉРµРєС‚, РґР°РЅРЅС‹Рµ = РјР°СЃСЃРёРІ", function(done){
+            domainService.getDomains({}).then(function(result){
+                expect(result).to.be.an('object');
+                expect(result.meta).to.be.an('object');
+                expect(result.domains).to.be.an('array');
+                done();
+            })
+        })
+    })
+
+    describe('create', function(){
+        it("Created domain", function(done){
+            var req={};
+            req.body={
+                "domain":"verysimpledomain.com",
+                "price":10000
+            };
+            domainService.create({},req).then(function(result){
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('domain');
+                done();
+            })
+        })
+    })
+
+    describe("delete", function(){
+        it("РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊСЃСЏ РѕС€РёР±РєР°", function(done){
+          domainService.delete({}).catch(function (result){
+              assert.deepEqual(result, errors.accessDenied);
+              done();
+          })  
+        })
+    })
+})
+
+describe("userService", function(){
+    
+    describe("read",function(){
+
+        it("return users", function(done){
+            var req={};
+            req.params={};
+            req.query={};
+            userService.read(req).then(function(result){
+                expect(result).to.be.an('object');
+                expect(result.meta).to.be.an('object');
+                done();
+            })
+        })
+
+        it("return user", function(done){
+            var req={};
+            req.params={};
+            req.params.id=8;
+            req.query={};
+            userService.read(req).then(function(result){
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('username');
+                done();
+            })
+        })
+
+    })
+
+    describe('create', function(){
+        it("Created user", function(done){
+            var req={};
+            req.body={
+                "username":"testuser",
+                "password":"1234578",
+                "cash":10000
+            };
+            userService.create({},req).then(function(result){
+                expect(result).to.be.an('object');
+                expect(result).to.have.property('cash');
+                done();
+            })
+        })
+    })
+
+    describe("delete", function(){
+        
+        it("respond with error",function(done){
+            userService.delet({}).catch(function(result){
+                assert.deepEqual(result, errors.accessDenied);
+                done();
+            })
+        })
+    })
+
 })
